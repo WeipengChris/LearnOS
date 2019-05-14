@@ -1,0 +1,4 @@
+title Learn_OS
+root (fd0)
+kernel /boot/cwp_kernel_0.1
+
