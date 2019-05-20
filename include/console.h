@@ -24,9 +24,10 @@ typedef enum real_color{
 
 void clear_console();
 void console_putc_color(char c,real_color_t back,real_color_t fore);
+void console_putc_random_color(char c);
 void console_write(char *cstr);
 void console_write_color(char *cstr,real_color_t back,real_color_t fore);
 void console_write_hex(uint32_t n,real_color_t back,real_color_t fore);
 void console_write_dec(uint32_t n,real_color_t back,real_color_t fore);
-
+void console_write_random_color(char *cstr);
 #endif

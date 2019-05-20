@@ -81,6 +81,50 @@ void console_putc_color(char c,real_color_t back,real_color_t fore)
     move_curser();
 }
 
+int random = 0;
+void console_putc_random_color(char c)
+{
+    random += 3;
+    if(random >= 10)
+        random %= 10;
+    if(random == 0)
+        random=3;       
+    
+    uint16_t contribute_random = ((0 << 4) | (random & 0x0F)) << 8;
+    uint16_t contribute = ((0 << 4) | (15 & 0x0F)) << 8;
+
+    if(c == 0x08 && curser_x)//tuigejian
+        curser_x --;
+    else if(c == 0x09)//tab
+        curser_x = (curser_x + 8) & 7; 
+    else if(c == '\r')
+        curser_x = 0;
+    else if(c == '\n')
+    {
+        curser_x = 0;
+        curser_y ++;
+    }
+    else if(c > ' ')
+    {
+        vedio_memory[curser_x + curser_y * 80] = c | contribute_random;
+        curser_x ++;
+    }
+    else if(c = ' ')
+    {
+        vedio_memory[curser_x + curser_y * 80] = c | contribute;
+        curser_x ++;
+    }
+
+    if(curser_x >= 80)
+    {
+        curser_x = 0;
+        curser_y ++;
+    }
+
+    screen_roll();
+
+    move_curser();
+}
 void console_write(char *cstr)
 {
     int i=0;
@@ -122,4 +166,11 @@ void console_write_dec(uint32_t n,real_color_t back,real_color_t fore)
     }
     while(top != base)
         console_putc_color(ascii_0toF[stack[--top]],back,fore);
+}
+
+void console_write_random_color(char *cstr)
+{
+    int i=0;
+    while(cstr[i] != '\0')
+        console_putc_random_color(cstr[i++]);
 }
